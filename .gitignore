@@ -14,3 +14,8 @@ env/
 
 # macOS
 .DS_Store
+
+# HTML files
+index.html
+simulators.html
+
