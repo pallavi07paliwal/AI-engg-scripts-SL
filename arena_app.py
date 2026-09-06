@@ -5,9 +5,10 @@ from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv()
 
-openai_client = OpenAI()                                  # uses OPENAI_API_KEY
-groq_client   = OpenAI(api_key=os.getenv("GROQ_API_KEY"),
-                            base_url="https://api.groq.com/openai/v1")
+groq_client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1",
+)
 
 def ask(client, model, prompt):
     r = client.chat.completions.create(
@@ -15,8 +16,8 @@ def ask(client, model, prompt):
     return r.choices[0].message.content
 
 def battle(prompt):
-    a = ask(openai_client, "gpt-4o-mini", prompt)
-    b = ask(groq_client, "llama-3.3-70b-versatile", prompt)
+    a = ask(groq_client, "openai/gpt-oss-120b", prompt)
+    b = ask(groq_client, "openai/gpt-oss-20b", prompt)
     return a, b
 
 def vote(label):
@@ -29,12 +30,12 @@ with gr.Blocks(title="LLM Arena") as demo:
 
     with gr.Row():
         with gr.Column():
-            gr.Markdown("### 🤖 Model A")
+            gr.Markdown("### 🤖 Model A — GPT OSS 120B")
             out_a = gr.Markdown()
             with gr.Row():
                 up_a   = gr.Button("👍");  down_a = gr.Button("👎")
         with gr.Column():
-            gr.Markdown("### 🤖 Model B")
+            gr.Markdown("### 🤖 Model B — GPT OSS 20B")
             out_b = gr.Markdown()
             with gr.Row():
                 up_b   = gr.Button("👍");  down_b = gr.Button("👎")
